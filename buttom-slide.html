@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Let`s Dragging and Droping with Cyroable Developer</title>
+		<meta name="description" content="Inspiration for drag and drop interactions for the modern UI" />
+		<meta name="keywords" content="drag and drop, interaction, inspiration, web design, ui" />
+		<meta name="author" content="Codrops" />
+		
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.2.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/bottom-slide.css" />
+		<script src="js/design.js"></script>
+</head>
+<body class="skin-5">
+    <div class="container">
+        <!--Navigation of top-->
+        <div class="codrops-top clearfix">
+            
+        </div>
+        <div class="content">
+            <header class="codrops-header">
+                <h1>Let`s Dragging and Droping with Cyroable Developer <span>Enjoy for the modern UI</span></h1>
+                <nav class="codrops-demos">
+                    <a href="index.html">Bottom Area</a>
+                    <a href="sidebar.html">Sidebar</a>
+                    <a href="page-scale.html">Page-scale</a>
+                    <a href="modal.html">Modal</a>
+                    <a href="icons.html">Icons</a>
+                    <a class="current-demo" href="buttom-slide.html">Buttom-slide</a>
+                    <a href="reveal.html">Reveal</a>
+                </nav>
+            </header>
+            <div id="grid" class="grid clearfix">
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+                <div class="grid__item"><i class="fa fa-fw fa-code"></i></div>
+            </div>
+            <!--Rel-->
+            <section class="related">
+                <p>Guys if you enjoyed this demo you might also like:</p>
+					<a href="https://github.com/cyriu77?tab=repositories/">
+						<img src="img/related/ELEPHANT.png" alt="ELEPHANT Image"/>
+						<h3>Cyroable`s GitHub Repository</h3>
+					</a>
+					<a href="https://github.com/cyriu77?tab=repositories/">
+						<img src="img/related/Nexia.png" alt="Nexia" />
+						<h3>Let`s Get With Cyroable</h3>
+					</a>
+            </section>
+        </div>
+    </div>
+    <div id="drop-area" class="drop-area">
+        <div>
+            <div class="dummy"></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-image-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-excel-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-code-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-archive-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-text-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-word-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-pdf-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-exel-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-sound-o"></i></div>
+            <div class="drop-area__item"><i class="fa fa-fw fa-file-powerpoint-o"></i></div>
+        </div>
+    </div>
+    <div class="drop-overlay"></div>
+    <script src="js/draggabilly.cyroable.main.js"></script>
+    <script src="js/dragdrop.js"></script>
+    <script>
+        (function() {
+				var body = document.body,
+					dropArea = document.getElementById( 'drop-area' ),
+					droppableArr = [], dropAreaTimeout;
+
+				// init dro
+				[].slice.call( document.querySelectorAll( '#drop-area .drop-area__item' )).forEach( function( el ) {
+					droppableArr.push( new Droppable( el, {
+						onDrop : function( instance, draggableEl ) {
+							
+							classie.add( instance.el, 'drop-feedback' );
+							clearTimeout( instance.checkmarkTimeout );
+							instance.checkmarkTimeout = setTimeout( function() { 
+								classie.remove( instance.el, 'drop-feedback' );
+							}, 800 );
+							// ...
+						}
+					} ) );
+				} );
+
+				// init drag
+				[].slice.call(document.querySelectorAll( '#grid .grid__item' )).forEach( function( el ) {
+					new Draggable( el, droppableArr, {
+						draggabilly : { containment: document.body },
+						scroll : true,
+						scrollable : '#drop-area',
+						scrollSpeed : 20,
+						scrollSensitivity : 10,
+						onStart : function() {
+							
+							classie.add( body, 'drag-active' );
+							
+							clearTimeout( dropAreaTimeout );
+							
+							classie.add( dropArea, 'show' );
+						},
+						onEnd : function( wasDropped ) {
+							var afterDropFn = function() {
+								
+								classie.remove( dropArea, 'show' );
+								
+								classie.remove( body, 'drag-active' );
+							};
+
+							if( !wasDropped ) {
+								afterDropFn();
+							}
+							else {
+								
+								clearTimeout( dropAreaTimeout );
+								dropAreaTimeout = setTimeout( afterDropFn, 400 );
+							}
+						}
+					} );
+				} );
+			})();
+    </script>
+</body>
+</html>
